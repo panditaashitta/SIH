@@ -1163,28 +1163,37 @@ class StudentManagementSystem {
         this.setupFormSubmissions();
     }
 
-    handleLogin(e) {
+        handleLogin(e) {
         e.preventDefault();
-        const username = document.getElementById('username').value;
+        const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
         const role = document.getElementById('role').value;
 
-        console.log('Login attempt:', { username, password, role });
+        console.log('Login attempt:', { username, role });
 
-        const user = this.data.users[username];
-        console.log('User found:', user);
-
-        if (user && user.password === password && user.role === role) {
-            console.log('Login successful for:', user.name, 'Role:', role);
-            this.currentUser = user;
-            this.currentRole = role;
-            this.showMainApp();
-            this.updateNavigation();
-            this.showNotification('Login successful!', 'success');
-        } else {
-            console.log('Login failed - invalid credentials');
-            this.showNotification('Invalid credentials!', 'error');
+        if (!username) {
+            this.showNotification('Please enter a username!', 'error');
+            return;
         }
+
+        // Accept any username/password manually:
+        // - If the user doesn't exist, create them
+        // - If the user exists, update their password/role so manual entry always works
+        const existingUser = this.data.users[username];
+        if (!existingUser) {
+            this.data.users[username] = { password: password, role: role, name: username };
+        } else {
+            existingUser.password = password;
+            existingUser.role = role;
+            // keep existingUser.name if you want, or set to username:
+            existingUser.name = existingUser.name || username;
+        }
+
+        this.currentUser = this.data.users[username];
+        this.currentRole = role;
+        this.showMainApp();
+        this.updateNavigation();
+        this.showNotification('Login successful!', 'success');
     }
 
     showLoginScreen() {
