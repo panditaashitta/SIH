@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Student Management System</title>
+    <link rel="stylesheet" href="integrated-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Integrated Student Management System Styles */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Login Screen */
+.login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.login-container {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-header {
+    margin-bottom: 2rem;
+}
+
+.login-header i {
+    font-size: 3rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.login-header h1 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.login-header p {
+    color: #7f8c8d;
+}
+
+.login-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.demo-credentials {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.demo-credentials h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.credential-item {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+/* Main Application */
+.main-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-brand i {
+    font-size: 2rem;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.nav-item.active {
+    background: rgba(255,255,255,0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.nav-controls {
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: background 0.3s ease;
+}
+
+.user-info:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.user-info i {
+    font-size: 1.5rem;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 0.5rem 0;
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.user-info:hover .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+.content-section {
+    display: block;
+}
+
+.content-section.hidden {
+    display: none;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.section-header h1 {
+    color: #2c3e50;
+    font-size: 2rem;
+}
+
+.section-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    display: block;
+}
+
+.dashboard-content.hidden {
+    display: none;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Staff Modules */
+.staff-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.module-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.module-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-color: #667eea;
+}
+
+.module-card i {
+    font-size: 3rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.module-card h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.module-card p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+}
+
+.card-header h3 {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+/* Profile Card */
+.profile-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+}
+
+.profile-details h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.profile-details p {
+    color: #7f8c8d;
+    margin-bottom: 0.3rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.status-badge.admitted {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Fee Card */
+.fee-summary {
+    margin-bottom: 1.5rem;
+}
+
+.fee-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.fee-item:last-child {
+    border-bottom: none;
+}
+
+.fee-label {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.fee-amount {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
+
+.fee-amount.paid {
+    color: #27ae60;
+}
+
+.fee-amount.pending {
+    color: #e74c3c;
+}
+
+/* Hostel Card */
+.hostel-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.room-details h4,
+.roommate-info h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.room-details p,
+.roommate-info p {
+    color: #7f8c8d;
+    margin-bottom: 0.3rem;
+}
+
+.status-occupied {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* Exam Card */
+.subject-grades {
+    margin-bottom: 1rem;
+}
+
+.grade-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.grade-item:last-child {
+    border-bottom: none;
+}
+
+.grade {
+    padding: 0.2rem 0.6rem;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.grade.A {
+    background: #d4edda;
+    color: #155724;
+}
+
+.grade.B {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.overall-cgpa {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+/* Library Card */
+.library-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.stat-value {
+    display: block;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.book-list {
+    margin-top: 1rem;
+}
+
+.book-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.book-item:last-child {
+    border-bottom: none;
+}
+
+.book-item.overdue {
+    background: #f8d7da;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin: 0.2rem 0;
+}
+
+.due-date {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.due-date.overdue {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.metric-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.metric-content h3 {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-value {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: bold;
+    display: block;
+}
+
+.metric-change {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.3rem;
+}
+
+.metric-change.positive {
+    color: #27ae60;
+}
+
+.metric-change.negative {
+    color: #e74c3c;
+}
+
+/* Charts Section */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.chart-container h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.chart-container canvas {
+    max-height: 300px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+tr:hover {
+    background: #f8f9fa;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Summary Cards */
+.fee-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.summary-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.summary-card h3 {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-card .amount {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.summary-card .amount.pending {
+    color: #e74c3c;
+}
+
+/* Occupancy Stats */
+.occupancy-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    border-top: 4px solid #667eea;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.stat-card h3 {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Library Operations */
+.library-operations {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.operation-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: #f8f9fa;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #7f8c8d;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group label {
+    display: block;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.issue-form {
+    max-width: 500px;
+}
+
+/* Reports Grid */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.report-card:hover {
+    transform: translateY(-3px);
+}
+
+.report-card h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.report-card p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #667eea;
+    color: #667eea;
+}
+
+.btn-outline:hover {
+    background: #667eea;
+    color: white;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal {
+    background: white;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.modal-header h3 {
+    color: #2c3e50;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: #f8f9fa;
+}
+
+.modal-content {
+    padding: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-menu {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .staff-modules {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .section-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .login-container {
+        margin: 1rem;
+        padding: 2rem;
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+    </style>
+</head>
+<body>
+    <script>
+        // Integrated Student Management System JavaScript
+
+class StudentManagementSystem {
+    constructor() {
+        this.currentUser = null;
+        this.currentRole = null;
+        this.currentSection = 'dashboard';
+        this.data = this.initializeData();
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.showLoginScreen();
+    }
+
+    initializeData() {
+        return {
+            users: {
+                'john.doe': { password: 'password123', role: 'student', name: 'John Doe' },
+                'sarah.johnson': { password: 'password123', role: 'staff', name: 'Sarah Johnson' },
+                'admin': { password: 'admin123', role: 'admin', name: 'Dr. Michael Smith' }
+            },
+            students: [
+                { id: 'STU2024001', name: 'John Doe', course: 'Computer Science', year: '3rd Year', status: 'Active' },
+                { id: 'STU2024002', name: 'Mike Johnson', course: 'Computer Science', year: '3rd Year', status: 'Active' },
+                { id: 'STU2024003', name: 'Alice Smith', course: 'Mechanical Engineering', year: '2nd Year', status: 'Active' },
+                { id: 'STU2024004', name: 'Bob Wilson', course: 'Electrical Engineering', year: '4th Year', status: 'Active' }
+            ],
+            applications: [
+                { id: 'APP2024001', name: 'Alice Smith', course: 'Mechanical Engineering', status: 'Pending', date: '2024-01-15' },
+                { id: 'APP2024002', name: 'Bob Wilson', course: 'Electrical Engineering', status: 'Approved', date: '2024-01-14' },
+                { id: 'APP2024003', name: 'Charlie Brown', course: 'Civil Engineering', status: 'Pending', date: '2024-01-16' }
+            ]
+        };
+    }
+
+    setupEventListeners() {
+        // Login form
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+        }
+
+        // Navigation items
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+                this.navigateToSection(section);
+            });
+        });
+
+        // User dropdown
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.logout());
+        }
+
+        // Library tabs
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+                this.showLibraryTab(tab);
+            });
+        });
+
+        // Form submissions
+        this.setupFormSubmissions();
+    }
+
+    handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+
+        console.log('Login attempt:', { username, password, role });
+
+        const user = this.data.users[username];
+        console.log('User found:', user);
+
+        if (user && user.password === password && user.role === role) {
+            console.log('Login successful for:', user.name, 'Role:', role);
+            this.currentUser = user;
+            this.currentRole = role;
+            this.showMainApp();
+            this.updateNavigation();
+            this.showNotification('Login successful!', 'success');
+        } else {
+            console.log('Login failed - invalid credentials');
+            this.showNotification('Invalid credentials!', 'error');
+        }
+    }
+
+    showLoginScreen() {
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+    }
+
+    showMainApp() {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        this.updateUserInfo();
+        this.updateNavigation();
+        this.loadDashboard();
+        this.setActiveNavigationItem('dashboard');
+    }
+
+    updateUserInfo() {
+        const currentUserElement = document.getElementById('currentUser');
+        if (currentUserElement) {
+            currentUserElement.textContent = this.currentUser.name;
+        }
+    }
+
+    setActiveNavigationItem(section) {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-section') === section) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    updateNavigation() {
+        console.log('Updating navigation for role:', this.currentRole);
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            const section = item.getAttribute('data-section');
+            const isAccessible = this.isSectionAccessible(section);
+            console.log(`Section ${section}: accessible = ${isAccessible}`);
+            if (isAccessible) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    isSectionAccessible(section) {
+        const rolePermissions = {
+            student: ['dashboard'],
+            staff: ['dashboard', 'students', 'admissions', 'fees', 'hostel', 'library', 'exams'],
+            admin: ['dashboard', 'students', 'staff', 'admissions', 'fees', 'hostel', 'library', 'exams', 'reports']
+        };
+        return rolePermissions[this.currentRole]?.includes(section) || false;
+    }
+
+    navigateToSection(section) {
+        if (!this.isSectionAccessible(section)) {
+            this.showNotification('Access denied!', 'error');
+            return;
+        }
+
+        this.currentSection = section;
+        
+        // Update active nav item
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-section') === section) {
+                item.classList.add('active');
+            }
+        });
+
+        // Hide all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Show selected section
+        const targetSection = document.getElementById(section + 'Section');
+        if (targetSection) {
+            targetSection.classList.remove('hidden');
+        }
+
+        // Load section-specific data
+        this.loadSectionData(section);
+    }
+
+    loadSectionData(section) {
+        switch (section) {
+            case 'dashboard':
+                this.loadDashboard();
+                break;
+            case 'students':
+                this.loadStudents();
+                break;
+            case 'admissions':
+                this.loadApplications();
+                break;
+            case 'fees':
+                this.loadFees();
+                break;
+            case 'hostel':
+                this.loadHostel();
+                break;
+            case 'library':
+                this.loadLibrary();
+                break;
+            case 'exams':
+                this.loadExams();
+                break;
+            case 'reports':
+                this.loadReports();
+                break;
+        }
+    }
+
+    loadDashboard() {
+        console.log('Loading dashboard for role:', this.currentRole);
+        
+        const dashboardTitle = document.getElementById('dashboardTitle');
+        const dashboardSubtitle = document.getElementById('dashboardSubtitle');
+
+        // Hide all dashboard content first
+        document.getElementById('studentDashboard').classList.add('hidden');
+        document.getElementById('staffDashboard').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.add('hidden');
+
+        if (this.currentRole === 'student') {
+            console.log('Showing student dashboard');
+            dashboardTitle.textContent = 'Student Dashboard';
+            dashboardSubtitle.textContent = 'Welcome back! Here\'s your academic overview.';
+            document.getElementById('studentDashboard').classList.remove('hidden');
+        } else if (this.currentRole === 'staff') {
+            console.log('Showing staff dashboard');
+            dashboardTitle.textContent = 'Staff Dashboard';
+            dashboardSubtitle.textContent = 'Manage student records and institutional operations.';
+            document.getElementById('staffDashboard').classList.remove('hidden');
+        } else if (this.currentRole === 'admin') {
+            console.log('Showing admin dashboard');
+            dashboardTitle.textContent = 'Admin Dashboard';
+            dashboardSubtitle.textContent = 'Institutional overview and analytics.';
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            
+            // Initialize charts after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                this.initializeCharts();
+            }, 100);
+        }
+    }
+
+    loadStudents() {
+        const tbody = document.getElementById('studentsTableBody');
+        if (tbody) {
+            tbody.innerHTML = this.data.students.map(student => `
+                <tr>
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.course}</td>
+                    <td>${student.year}</td>
+                    <td><span class="status-approved">${student.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="sms.viewStudent('${student.id}')">View</button>
+                        ${this.currentRole !== 'student' ? `<button class="btn btn-sm btn-primary" onclick="sms.editStudent('${student.id}')">Edit</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    loadApplications() {
+        const tbody = document.getElementById('applicationsTableBody');
+        if (tbody) {
+            tbody.innerHTML = this.data.applications.map(app => `
+                <tr>
+                    <td>${app.id}</td>
+                    <td>${app.name}</td>
+                    <td>${app.course}</td>
+                    <td><span class="status-${app.status.toLowerCase()}">${app.status}</span></td>
+                    <td>${app.date}</td>
+                    <td>
+                        ${app.status === 'Pending' ? `<button class="btn btn-sm btn-success" onclick="sms.verifyApplication('${app.id}')">Verify</button>` : ''}
+                        <button class="btn btn-sm btn-secondary" onclick="sms.viewApplication('${app.id}')">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    loadFees() {
+        // Fee data would be loaded here
+        this.showNotification('Fee data loaded', 'success');
+    }
+
+    loadHostel() {
+        // Hostel data would be loaded here
+        this.showNotification('Hostel data loaded', 'success');
+    }
+
+    loadLibrary() {
+        // Library data would be loaded here
+        this.showNotification('Library data loaded', 'success');
+    }
+
+    loadExams() {
+        // Exam data would be loaded here
+        this.showNotification('Exam data loaded', 'success');
+    }
+
+    loadReports() {
+        // Reports would be loaded here
+        this.showNotification('Reports loaded', 'success');
+    }
+
+    showLibraryTab(tab) {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-tab') === tab) {
+                btn.classList.add('active');
+            }
+        });
+
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        tabPanels.forEach(panel => {
+            panel.classList.remove('active');
+            if (panel.id === tab + 'Tab') {
+                panel.classList.add('active');
+            }
+        });
+    }
+
+    setupFormSubmissions() {
+        // Issue book form
+        const issueForm = document.querySelector('.issue-form');
+        if (issueForm) {
+            issueForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.showNotification('Book issued successfully!', 'success');
+            });
+        }
+
+        // Exam marks upload form
+        const examForm = document.querySelector('#examsSection form');
+        if (examForm) {
+            examForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.showNotification('Marks uploaded successfully!', 'success');
+            });
+        }
+    }
+
+    initializeCharts() {
+        console.log('Initializing charts...');
+        
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded!');
+            return;
+        }
+
+        // Clear any existing charts first
+        const admissionsCtx = document.getElementById('admissionsChart');
+        const feesCtx = document.getElementById('feesChart');
+        
+        if (!admissionsCtx || !feesCtx) {
+            console.error('Chart canvas elements not found!');
+            return;
+        }
+
+        console.log('Chart canvas elements found, creating charts...');
+        
+        // Destroy existing charts if they exist
+        if (window.admissionsChart) {
+            window.admissionsChart.destroy();
+        }
+        if (window.feesChart) {
+            window.feesChart.destroy();
+        }
+        
+        try {
+            // Admissions Chart
+            window.admissionsChart = new Chart(admissionsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Admissions',
+                        data: [45, 52, 38, 65, 72, 58, 48, 55, 62, 68, 45, 52],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Fees Chart
+            window.feesChart = new Chart(feesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Fee Collection (₹ Lakhs)',
+                        data: [25, 30, 28, 35, 40, 32, 38, 42, 45, 38, 35, 40],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: '#667eea',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            console.log('Charts created successfully!');
+        } catch (error) {
+            console.error('Error creating charts:', error);
+        }
+    }
+
+    logout() {
+        this.currentUser = null;
+        this.currentRole = null;
+        this.currentSection = 'dashboard';
+        this.showLoginScreen();
+        this.showNotification('Logged out successfully!', 'success');
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1'};
+            color: ${type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460'};
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Action methods
+    viewStudent(studentId) {
+        this.showNotification(`Viewing student ${studentId}`, 'success');
+    }
+
+    editStudent(studentId) {
+        this.showNotification(`Editing student ${studentId}`, 'success');
+    }
+
+    verifyApplication(appId) {
+        const app = this.data.applications.find(a => a.id === appId);
+        if (app) {
+            app.status = 'Approved';
+            this.loadApplications();
+            this.showNotification(`Application ${appId} verified successfully!`, 'success');
+        }
+    }
+
+    viewApplication(appId) {
+        this.showNotification(`Viewing application ${appId}`, 'success');
+    }
+}
+
+// Global functions for onclick handlers
+function navigateToSection(section) {
+    sms.navigateToSection(section);
+}
+
+function downloadReceipts() {
+    sms.showNotification('Receipts downloaded successfully!', 'success');
+}
+
+function addStudent() {
+    sms.showNotification('Add student form opened', 'success');
+}
+
+function addApplication() {
+    sms.showNotification('Add application form opened', 'success');
+}
+
+function recordPayment() {
+    sms.showNotification('Record payment form opened', 'success');
+}
+
+function allocateRoom() {
+    sms.showNotification('Allocate room form opened', 'success');
+}
+
+function issueBook() {
+    sms.showNotification('Issue book form opened', 'success');
+}
+
+function uploadMarks() {
+    sms.showNotification('Upload marks form opened', 'success');
+}
+
+function exportPDF() {
+    sms.showNotification('PDF report exported successfully!', 'success');
+}
+
+function exportCSV() {
+    sms.showNotification('CSV report exported successfully!', 'success');
+}
+
+function generateReport(type) {
+    sms.showNotification(`${type} report generated successfully!`, 'success');
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+}
+
+// Initialize the application
+let sms;
+document.addEventListener('DOMContentLoaded', function() {
+    sms = new StudentManagementSystem();
+    
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+// Export for potential use
+window.StudentManagementSystem = StudentManagementSystem;
+
+    </script>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Student Management System</h1>
+                <p>Please login to continue</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="student">Student</option>
+                        <option value="staff">Staff</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <!--<div class="demo-credentials">
+                <h3>Demo Credentials:</h3>
+                <div class="credential-item">
+                    <strong>Student:</strong> john.doe/password123
+                </div>
+                <div class="credential-item">
+                    <strong>Staff:</strong> sarah.johnson / password123
+                </div>
+                <div class="credential-item">
+                    <strong>Admin:</strong> admin / admin123
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Navigation Header -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Student Management System</span>
+                </div>
+                <div class="nav-menu">
+                    <div class="nav-item" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="nav-item" data-section="students">
+                        <i class="fas fa-users"></i>
+                        <span>Students</span>
+                    </div>
+                    <div class="nav-item" data-section="staff">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Staff</span>
+                    </div>
+                    <div class="nav-item" data-section="admissions">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Admissions</span>
+                    </div>
+                    <div class="nav-item" data-section="fees">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Fees</span>
+                    </div>
+                    <div class="nav-item" data-section="hostel">
+                        <i class="fas fa-bed"></i>
+                        <span>Hostel</span>
+                    </div>
+                    <div class="nav-item" data-section="library">
+                        <i class="fas fa-book"></i>
+                        <span>Library</span>
+                    </div>
+                    <div class="nav-item" data-section="exams">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Exams</span>
+                    </div>
+                    <div class="nav-item" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </div>
+                </div>
+                <div class="nav-controls">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="currentUser">User</span>
+                        <div class="user-dropdown">
+                            <div class="dropdown-item" id="profileBtn">
+                                <i class="fas fa-user"></i> Profile
+                            </div>
+                            <div class="dropdown-item" id="settingsBtn">
+                                <i class="fas fa-cog"></i> Settings
+                            </div>
+                            <div class="dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section">
+                <div class="section-header">
+                    <h1 id="dashboardTitle">Dashboard</h1>
+                    <p id="dashboardSubtitle">Welcome to your dashboard</p>
+                </div>
+                
+                <!-- Student Dashboard -->
+                <div id="studentDashboard" class="dashboard-content">
+                    <div class="dashboard-grid">
+                        <div class="card profile-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-id-card"></i> Profile & Admission Status</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="profile-info">
+                                    <div class="profile-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="profile-details">
+                                        <h4 id="studentName">John Doe</h4>
+                                        <p id="studentId">Student ID: STU2024001</p>
+                                        <p id="studentCourse">Course: Computer Science Engineering</p>
+                                        <p id="studentYear">Year: 3rd Year</p>
+                                        <div class="status-badge admitted">
+                                            <i class="fas fa-check-circle"></i>
+                                            Admitted
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card fee-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-credit-card"></i> Fee Status</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="fee-summary">
+                                    <div class="fee-item">
+                                        <span class="fee-label">Tuition Fee</span>
+                                        <span class="fee-amount paid">₹45,000 <i class="fas fa-check"></i></span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-label">Hostel Fee</span>
+                                        <span class="fee-amount paid">₹25,000 <i class="fas fa-check"></i></span>
+                                    </div>
+                                    <div class="fee-item">
+                                        <span class="fee-label">Library Fee</span>
+                                        <span class="fee-amount pending">₹2,000 <i class="fas fa-clock"></i></span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="downloadReceipts()">
+                                    <i class="fas fa-download"></i> Download Receipts
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card hostel-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-bed"></i> Hostel Allocation</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="hostel-info">
+                                    <div class="room-details">
+                                        <h4>Room Details</h4>
+                                        <p><strong>Block:</strong> Block A</p>
+                                        <p><strong>Room:</strong> A-205</p>
+                                        <p><strong>Type:</strong> Double Occupancy</p>
+                                        <p><strong>Status:</strong> <span class="status-occupied">Occupied</span></p>
+                                    </div>
+                                    <div class="roommate-info">
+                                        <h4>Roommate</h4>
+                                        <p>Mike Johnson</p>
+                                        <p>STU2024002</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card exam-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-chart-line"></i> Exam Results</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="exam-results">
+                                    <div class="semester-result">
+                                        <h4>Semester 5 Results</h4>
+                                        <div class="subject-grades">
+                                            <div class="grade-item">
+                                                <span>Data Structures</span>
+                                                <span class="grade A">A+</span>
+                                            </div>
+                                            <div class="grade-item">
+                                                <span>Database Systems</span>
+                                                <span class="grade A">A</span>
+                                            </div>
+                                            <div class="grade-item">
+                                                <span>Computer Networks</span>
+                                                <span class="grade B">B+</span>
+                                            </div>
+                                            <div class="grade-item">
+                                                <span>Software Engineering</span>
+                                                <span class="grade A">A</span>
+                                            </div>
+                                        </div>
+                                        <div class="overall-cgpa">
+                                            <strong>CGPA: 8.5/10</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card library-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-book"></i> Library Information</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="library-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Books Issued</span>
+                                        <span class="stat-value">3</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Due Books</span>
+                                        <span class="stat-value">1</span>
+                                    </div>
+                                </div>
+                                <div class="book-list">
+                                    <div class="book-item">
+                                        <span>Introduction to Algorithms</span>
+                                        <span class="due-date">Due: Dec 15, 2024</span>
+                                    </div>
+                                    <div class="book-item">
+                                        <span>Database Design</span>
+                                        <span class="due-date">Due: Dec 20, 2024</span>
+                                    </div>
+                                    <div class="book-item overdue">
+                                        <span>Computer Networks</span>
+                                        <span class="due-date overdue">Overdue: Dec 10, 2024</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Dashboard -->
+                <div id="staffDashboard" class="dashboard-content hidden">
+                    <div class="staff-modules">
+                        <div class="module-card" onclick="navigateToSection('admissions')">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>Admissions</h3>
+                            <p>Manage student applications</p>
+                        </div>
+                        <div class="module-card" onclick="navigateToSection('fees')">
+                            <i class="fas fa-credit-card"></i>
+                            <h3>Fees</h3>
+                            <p>Handle fee payments</p>
+                        </div>
+                        <div class="module-card" onclick="navigateToSection('hostel')">
+                            <i class="fas fa-bed"></i>
+                            <h3>Hostel</h3>
+                            <p>Room allocation</p>
+                        </div>
+                        <div class="module-card" onclick="navigateToSection('library')">
+                            <i class="fas fa-book"></i>
+                            <h3>Library</h3>
+                            <p>Book management</p>
+                        </div>
+                        <div class="module-card" onclick="navigateToSection('exams')">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Exams</h3>
+                            <p>Upload marks</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="adminDashboard" class="dashboard-content hidden">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="metric-content">
+                                <h3>Total Students</h3>
+                                <span class="metric-value">2,450</span>
+                                <span class="metric-change positive">+5.2%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="metric-content">
+                                <h3>New Admissions</h3>
+                                <span class="metric-value">450</span>
+                                <span class="metric-change positive">+12.3%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="metric-content">
+                                <h3>Fees Collected</h3>
+                                <span class="metric-value">₹2.45Cr</span>
+                                <span class="metric-change positive">+8.7%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                            <div class="metric-content">
+                                <h3>Hostel Occupancy</h3>
+                                <span class="metric-value">80%</span>
+                                <span class="metric-change negative">-2.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="charts-section">
+                        <div class="chart-container">
+                            <h3>Admissions Trend</h3>
+                            <canvas id="admissionsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Fee Collection Trend</h3>
+                            <canvas id="feesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="studentsSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Student Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="addStudent()">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                    </div>
+                </div>
+                <div class="students-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Admissions Section -->
+            <section id="admissionsSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Admissions Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="addApplication()">
+                            <i class="fas fa-plus"></i> New Application
+                        </button>
+                    </div>
+                </div>
+                <div class="applications-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Application ID</th>
+                                <th>Student Name</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Applied Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Fees Section -->
+            <section id="feesSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Fee Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="recordPayment()">
+                            <i class="fas fa-plus"></i> Record Payment
+                        </button>
+                    </div>
+                </div>
+                <div class="fee-summary-cards">
+                    <div class="summary-card">
+                        <h3>Total Collected</h3>
+                        <span class="amount">₹2,45,000</span>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Pending Amount</h3>
+                        <span class="amount pending">₹15,000</span>
+                    </div>
+                    <div class="summary-card">
+                        <h3>This Month</h3>
+                        <span class="amount">₹45,000</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hostel Section -->
+            <section id="hostelSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Hostel Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="allocateRoom()">
+                            <i class="fas fa-plus"></i> Allocate Room
+                        </button>
+                    </div>
+                </div>
+                <div class="occupancy-stats">
+                    <div class="stat-card">
+                        <h3>Total Rooms</h3>
+                        <span class="stat-number">150</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Occupied</h3>
+                        <span class="stat-number">120</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Available</h3>
+                        <span class="stat-number">30</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Occupancy Rate</h3>
+                        <span class="stat-number">80%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Library Section -->
+            <section id="librarySection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Library Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="issueBook()">
+                            <i class="fas fa-plus"></i> Issue Book
+                        </button>
+                    </div>
+                </div>
+                <div class="library-operations">
+                    <div class="operation-tabs">
+                        <button class="tab-btn active" data-tab="issue">Issue Book</button>
+                        <button class="tab-btn" data-tab="return">Return Book</button>
+                        <button class="tab-btn" data-tab="overdue">Overdue Books</button>
+                    </div>
+                    <div class="tab-content">
+                        <div id="issueTab" class="tab-panel active">
+                            <form class="issue-form">
+                                <div class="form-group">
+                                    <label>Student ID</label>
+                                    <input type="text" placeholder="Enter Student ID">
+                                </div>
+                                <div class="form-group">
+                                    <label>Book ISBN</label>
+                                    <input type="text" placeholder="Enter Book ISBN">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Issue Book</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exams Section -->
+            <section id="examsSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Exam Management</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="uploadMarks()">
+                            <i class="fas fa-upload"></i> Upload Marks
+                        </button>
+                    </div>
+                </div>
+                <div class="exam-management">
+                    <div class="exam-form">
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <select>
+                                        <option>Data Structures</option>
+                                        <option>Database Systems</option>
+                                        <option>Computer Networks</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Semester</label>
+                                    <select>
+                                        <option>Semester 5</option>
+                                        <option>Semester 6</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Upload Marks File</label>
+                                <input type="file" accept=".csv,.xlsx">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Marks</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reportsSection" class="content-section hidden">
+                <div class="section-header">
+                    <h1>Reports & Analytics</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="exportPDF()">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportCSV()">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h4>Student Demographics</h4>
+                        <p>Detailed breakdown by course, year, and gender</p>
+                        <button class="btn btn-outline" onclick="generateReport('demographics')">Generate Report</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>Financial Summary</h4>
+                        <p>Complete fee collection and pending analysis</p>
+                        <button class="btn btn-outline" onclick="generateReport('financial')">Generate Report</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>Academic Performance</h4>
+                        <p>Exam results and pass rates by department</p>
+                        <button class="btn btn-outline" onclick="generateReport('academic')">Generate Report</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>Hostel Utilization</h4>
+                        <p>Room allocation and occupancy statistics</p>
+                        <button class="btn btn-outline" onclick="generateReport('hostel')">Generate Report</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="modalContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="integrated-script.js"></script>
+</body>
+</html>
